@@ -1,5 +1,5 @@
 <!-- CPSC 304 Group 51 Project
-  Created by Diwakar Gupta, Muke Wang and Henry Tian
+  Created by Diwakar Gupta, Mick Toyingsirikul and Henry Tian
 
   Specifically, it will drop a table, create a table, insert values
   update values, and then query for values
