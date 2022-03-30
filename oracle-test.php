@@ -1,9 +1,6 @@
-<!--Test Oracle file for UBC CPSC304 2018 Winter Term 1
-  Created by Jiemin Zhang
-  Modified by Simona Radu
-  Modified by Jessica Wong (2018-06-22)
-  This file shows the very basics of how to execute PHP commands
-  on Oracle.
+<!-- CPSC 304 Group 51 Project
+  Created by Diwakar Gupta, Muke Wang and Henry Tian
+
   Specifically, it will drop a table, create a table, insert values
   update values, and then query for values
 
@@ -18,7 +15,7 @@
 
   <html>
     <head>
-        <title>CPSC 304 PHP/Oracle Demonstration</title>
+        <title>CPSC 304 Group 51 Project </title>
     </head>
 
     <body>
@@ -30,7 +27,7 @@
             <input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
             <p><input type="submit" value="Reset" name="reset"></p>
         </form>
-
+	    
         <hr />
 
         <h2>Initiate Table</h2>
@@ -45,28 +42,78 @@
         <hr />
 
 
-        <h2>Insert Values into DemoTable</h2>
-        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
+                <h2>Insert Ingredient into Table </h2>
+        <form method="POST" action="mysql-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            ID: <input type="text" name="review_id"> <br /><br />
-            date: <input type="text" name="review_date"> <br /><br />
-            Score: <input type="text" name="num_star"> <br /><br />
+            ID: <input type="text" name="Ingredient_ID:"> <br /><br />
+            Name: <input type="text" name="Ingredient_Name"> <br /><br />
 
             <input type="submit" value="Insert" name="insertSubmit"></p>
         </form>
 
         <hr />
 
-        <h2>Update Name in DemoTable</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+        <h2>Update num_star in FiveStarReview</h2>
+        <p>The value must be between 1 and 5 inclusive, any other value will be rejected</p>
 
-        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
+        <form method="POST" action="mysql-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-            Old Name: <input type="text" name="oldName"> <br /><br />
-            New Name: <input type="text" name="newName"> <br /><br />
+           Review ID: <input type="text" name="review_id"> <br /><br />
+            New Name: <input type="number" name="newRating"> <br /><br />
 
             <input type="submit" value="Update" name="updateSubmit"></p>
         </form>
+ <hr />
+
+        <h2>Delete Review</h2>
+        <p>If the rid does not exist query will be rejected</p>
+
+        <form method="POST" action="mysql-test.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
+            Review ID: <input type="text" name="review_id"> <br /><br />
+
+            <input type="submit" value="Delete" name="deleteSubmit"></p>
+        </form>
+ <hr />
+
+<h2>Selection</h2>
+        <p>Get all owners with networth greater than entered value </p>
+
+        <form method="POST" action="mysql-test.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="selectQueryRequest" name="selectQueryRequest">
+            Review ID: <input type="number" name="networth"> <br /><br />
+
+            <input type="submit" value="Delete" name="selectionSubmit"></p>
+        </form>
+
+
+        <hr />
+
+<h2>Projection</h2>
+        <p>Get the specified column from specified relation</p>
+
+        <form method="POST" action="mysql-test.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="projectQueryRequest" name="projectQueryRequest">
+            Relation: <input type="text" name="relation"> <br /><br />
+	    Column: <input type="text" name="column"> <br /><br />
+
+            <input type="submit" value="Delete" name="projectionSubmit"></p>
+        </form>
+
+
+        <hr />
+
+
+<h2>Join</h2>
+        <p>Get all the restuarants in a certain city</p>
+
+        <form method="POST" action="mysql-test.php"> <!--refresh page when submitted-->
+            <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
+            City: <input type="text" name="City"> <br /><br />
+
+            <input type="submit" value="Delete" name="joinSubmit"></p>
+        </form>
+
 
         <hr />
 
@@ -93,6 +140,8 @@
             <input type="hidden" id="getDivRequest" name="getDivRequest">
             <input type="submit" name="getDiv"></p>
         </form>
+
+
 
         <?php
 		//this tells the system that it's no longer just parsing html; it's now parsing PHP
@@ -210,13 +259,46 @@
         function handleUpdateRequest() {
             global $db_conn;
 
-            $old_name = $_POST['oldName'];
-            $new_name = $_POST['newName'];
+            $rid = $_POST['review_id'];
+            $new_rating = $_POST['newRating'];
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            executePlainSQL("UPDATE FiveStarReview SET num_star ='" .  $new_rating . "' WHERE rid ='" .   $rid  . "'");
             OCICommit($db_conn);
         }
+
+         function handleDeleteRequest() {
+            global $db_conn;
+
+            $rid = $_POST['review_id'];
+
+            // you need the wrap the old name and new name values with single quotations
+            executePlainSQL("DELETE FiveStarReview  WHERE rid ='" .   $rid  . "'");
+            OCICommit($db_conn);
+        }
+        
+        function handleSelectRequest() {
+	    global $db_conn;
+	    $nw = $_POST['networth'];
+            $result = executePlainSQL("SELECT owner_id, name
+                                        FROM Owner
+                                        WHERE networth_CAD >= $nw");
+            while (($row = oci_fetch_row($result)) != false) {
+		     echo "   owner_id : " . $row[0]  . " name : " . $row[2] . "<br>";
+            }
+	}
+
+
+        function handleProjectionRequest() {
+		global $db_conn;
+		
+		
+	}
+
+
+        function handleJoinRequest() {
+	}
+
 
         function handleResetRequest() {
             global $db_conn;
@@ -338,16 +420,15 @@
             //Getting the values from user and insert data into the table
             
             $tuple = array (
-                ":bind1" => $_POST['review_id'],
-                ":bind2" => $_POST['review_date'],
-                ":bind3" => $_POST['num_star']
+                ":bind1" => $_POST['Ingredient_ID'],
+                ":bind2" => $_POST['Ingredient_Name']
             );
 
             $alltuples = array (
                 $tuple
             );
             // echo "t " + $_POST;
-            executeBoundSQL("insert into demoTable values (:bind1, :bind2, :bind3)", $alltuples);
+            executeBoundSQL("insert into Ingredient values (:bind1, :bind2)", $alltuples);
             OCICommit($db_conn);
         }
 
@@ -375,6 +456,8 @@
                 } else if (array_key_exists('initTableQueryRequest', $_POST)) {
                     echo "<br> The number of    <br>";
                     handleInitRequest();
+                } else if (array_key_exists('deleteQueryRequest', $_POST)) {
+                    handleDeleteRequest();
                 }
 
                 disconnectFromDB();
@@ -393,6 +476,12 @@
                     handleGetMaxAvgRequest();
                 } else if (array_key_exists('getDiv', $_GET)) {
                     handleGetDivRequest();
+                } else if (array_key_exists('selectQueryRequest', $_GET)) {
+                    handleSelectRequest();
+                } else if (array_key_exists('projectQueryRequest', $_GET)) {
+                    handleProjectionRequest();
+                } else if (array_key_exists('joinQueryRequest', $_GET)) {
+                    handleJoinRequest();
                 }
 
                 disconnectFromDB();
