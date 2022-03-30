@@ -291,8 +291,10 @@
 
         function handleProjectionRequest() {
 		global $db_conn;
-		
-		
+		$rel = $_POST['relation'];
+		$col = $_POST['column'];
+		$result = executePlainSQL("SELECT $col
+                                        FROM $rel");
 	}
 
 
