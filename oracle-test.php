@@ -109,7 +109,7 @@
 
         <form method="POST" action="mysql-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
-            City: <input type="text" name="City"> <br /><br />
+            City: <input type="text" name="city"> <br /><br />
 
             <input type="submit" value="Delete" name="joinSubmit"></p>
         </form>
@@ -295,10 +295,21 @@
 		$col = $_POST['column'];
 		$result = executePlainSQL("SELECT $col
                                         FROM $rel");
+		while (($row = oci_fetch_row($result)) != false) {
+		     echo "   $col " . $row[0] "<br>";
+            }
 	}
 
 
         function handleJoinRequest() {
+		global $db_conn;
+		$city = $_POST['city']
+		$result = executePlainSQL(SELECT rid, name
+					 FROM Restaurant r, postal_city p, Location l
+					 WHERE p.city = $city AND p.postal_code = l.postal_code AND
+					 l.latitude = r.latitude AND l.longitude = r.longitude)
+		while (($row = oci_fetch_row($result)) != false) {
+                echo "   rid : " . $row[0]  . " name : " . $row[1] . "<br>";
 	}
 
 
