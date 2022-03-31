@@ -230,6 +230,7 @@
                 longitude float ,
                 address char(40),
                 postal_code char(20),
+                city char(20),
                 CONSTRAINT supplier_pk PRIMARY KEY (latitude,longitude)
                     )");
             executePlainSQL("CREATE TABLE Restaurant( 
@@ -297,10 +298,13 @@
         function handleGetMaxAvgRequest() {
             global $db_conn;
             echo "<br> The top-rated Restaurant is<br>";
-            $result = executePlainSQL("SELECT rname, numstar
+            $result = executePlainSQL("SELECT rname, AVG(numstar)
                                         FROM review
                                         INNER JOIN Restaurant 
-                                        ON review.rid = Restaurant.rid and review.numstar = (SELECT MAX(avg) FROM (SELECT rname as r_name, review.rid, AVG(numstar) as avg
+                                        ON review.rid = Restaurant.rid
+                                        GROUP BY review.rid, rname
+                                        HAVING AVG(numstar) = 
+                                                                (SELECT MAX(avg) FROM (SELECT rname as r_name, review.rid, AVG(numstar) as avg
                                                                                                 FROM review
                                                                                                 INNER JOIN Restaurant 
                                                                                                 ON review.rid = Restaurant.rid
