@@ -11,9 +11,9 @@ FOREIGN KEY (owner_id) REFERENCES Owner ON UPDATE cascade, FOREIGN KEY (latitude
 CREATE TABLE Location(latitude float, longitude float, address char(40), postal_code char(20), PRIMARY KEY(latitude, longitude),
 UNIQUE (address, postal_code), FOREIGN KEY (postal_code) REFERENCES postal_city ON UPDATE CASCADE)
 
-CREATE TABLE Postal_City(postal_code char(20) PRIMARY KEY, city char(20))
+CREATE TABLE Postal_City(postal_code char(10) PRIMARY KEY, city char(20))
 
-CREATE TABLE Menu_Offer(menu_name char(20), rid int, price_cad int, PRIMARY KEY(menu_name, rid), 
+CREATE TABLE Menu_Offer(menu_name char(30), rid int, price_cad int, PRIMARY KEY(menu_name, rid), 
 FOREIGN KEY (rid) REFERENCES Restaurant)
 
 CREATE TABLE Membership(member_id int PRIMARY KEY, startDate , totalPoints int, username char(30) NOT NULL, 
@@ -24,19 +24,19 @@ CREATE TABLE Level_Rewards(member_level char(10) PRIMARY KEY, reward_multiplier 
 
 CREATE TABLE Ingredient(ingredient_id int PRIMARY KEY, name char(30) NOT NULL)
 
-CREATE TABLE FiveStarReview(review_id int PRIMARY KEY, date:, num_star int, rid int, 
-username char(20), FOREIGN KEY (rid) REFERENCES Restaurant(rid),
+CREATE TABLE FiveStarReview(review_id int PRIMARY KEY, datePosted date, num_star int, rid int, 
+username char(30), FOREIGN KEY (rid) REFERENCES Restaurant(rid),
 FOREIGN KEY (username) REFERENCES Customer(username)
 )
 
-CREATE TABLE ThumbsReview(review_id int PRIMARY KEY, date:, thumbsUp boolean, rid int, 
-username char(20), FOREIGN KEY (rid) REFERENCES Restaurant(rid),
+CREATE TABLE ThumbsReview(review_id int PRIMARY KEY, datePosted date, thumbsUp boolean, rid int, 
+username char(30), FOREIGN KEY (rid) REFERENCES Restaurant(rid),
 FOREIGN KEY (username) REFERENCES Customer(username))
 
-CREATE TABLE FullReview(review_id int PRIMARY KEY, date:, PictureURL char(50), 
+CREATE TABLE FullReview(review_id int PRIMARY KEY, datePosted date, PictureURL char(50), 
 content char(200), rid int, username char(20))
 
-CREATE TABLE Customer(email char(40), usrename char(20) PRIMARY KEY, name char(30), birthdate:
+CREATE TABLE Customer(email char(40), usrename char(30) PRIMARY KEY, name char(30), birthdate date,
 UNIQUE(email))
 
 CREATE TABLE Allow_Reward(rid int, member_id int, PRIMARY KEY (rid, member_id), 
