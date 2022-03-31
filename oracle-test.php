@@ -183,10 +183,9 @@
 
         function connectToDB() {
             global $db_conn;
-	    <remove this>
             // Your username is ora_(CWL_ID) and the password is a(student number). For example,
 			// ora_platypus is the username and a12345678 is the password.
-            $db_conn = OCILogon("ora_cwl", "aSID", 
+            $db_conn = OCILogon("ora_ttoyings", "a26835728", 
 "dbhost.students.cs.ubc.ca:1522/stu");
 
             if ($db_conn) {
@@ -223,18 +222,30 @@
             // Drop old table
             executePlainSQL("DROP TABLE review");
             executePlainSQL("DROP TABLE Restaurant");
-
+            executePlainSQL("DROP TABLE LocationTable");
             // Create new table
             echo "<br> creating new table <br>";
+            executePlainSQL("CREATE TABLE LocationTable( 
+                latitude float , 
+                longitude float ,
+                address char(40),
+                postal_code char(20),
+                CONSTRAINT supplier_pk PRIMARY KEY (latitude,longitude)
+                    )");
             executePlainSQL("CREATE TABLE Restaurant( 
                               rid int PRIMARY KEY, 
-                              rname char(30))");
+                              rname char(30),
+                              latitude float NOT NULL,
+                              longitude float NOT NULL,
+                              CONSTRAINT fk_supplier_comp
+                                FOREIGN KEY (latitude,longitude)
+                                REFERENCES LocationTable(latitude,longitude))");
 
             executePlainSQL("CREATE TABLE review (review_id int PRIMARY KEY, 
                                 date_created date default sysdate, 
                                 numstar INTEGER check(numstar >=  0 and numstar <=5) , 
                                 rid int, 
-                            CONSTRAINT fk_supplier_comp
+                            CONSTRAINT fk_supplier_comp1
                                 FOREIGN KEY (rid)
                                 REFERENCES Restaurant(rid))
                             ");
@@ -243,23 +254,25 @@
 
         function handleInitRequest() {
             global $db_conn;
+            executePlainSQL("INSERT INTO LocationTable 
+            VALUES ('111', '222', '453-ABC vv','A2A B2V' )");
             executePlainSQL("INSERT INTO Restaurant 
-                             VALUES ('1223123', 'Restaurant 1')");
+                             VALUES ('1223123', 'Restaurant 1', '111','222')");
             executePlainSQL("INSERT INTO Restaurant 
-                             VALUES ('32333', 'Restaurant 2')");
+                             VALUES ('32333', 'Restaurant 2', '111','222')");
 
             executePlainSQL("INSERT INTO review 
                              VALUES ('0100', DATE '2015-12-17', '1', '1223123')");
             executePlainSQL("INSERT INTO review 
-            VALUES ('0120', DATE '2015-12-17', '2', '1223123')");
+            VALUES ('0120', DATE '2015-12-17', '0', '1223123')");
             executePlainSQL("INSERT INTO review 
             VALUES ('0130', DATE '2015-12-17', '3', '1223123')");
-                        executePlainSQL("INSERT INTO review 
-                        VALUES ('012220', DATE '2015-12-17', '4', '1223123')");
-                        executePlainSQL("INSERT INTO review 
-                        VALUES ('013220', DATE '2015-12-17', '5', '1223123')");
             executePlainSQL("INSERT INTO review 
-            VALUES ('23213', DATE '2015-12-17', '5', '32333')");
+            VALUES ('012220', DATE '2015-12-17', '4', '1223123')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('013220', DATE '2015-12-17', '1', '1223123')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('23213', DATE '2015-12-17', '1', '32333')");
 
             OCICommit($db_conn);
         }
@@ -373,7 +386,6 @@
                 } else if (array_key_exists('insertQueryRequest', $_POST)) {
                     handleInsertRequest();
                 } else if (array_key_exists('initTableQueryRequest', $_POST)) {
-                    echo "<br> The number of    <br>";
                     handleInitRequest();
                 }
 
