@@ -6,9 +6,7 @@
   on Oracle.
   Specifically, it will drop a table, create a table, insert values
   update values, and then query for values
-
   IF YOU HAVE A TABLE CALLED "demoTable" IT WILL BE DESTROYED
-
   The script assumes you already have a server set up
   All OCI commands are commands to the Oracle libraries
   To get the file to work, you must place it somewhere where your
@@ -255,26 +253,77 @@
 
         function handleInitRequest() {
             global $db_conn;
-            executePlainSQL("INSERT INTO LocationTable 
-            VALUES ('111', '222', '453-ABC vv','A2A B2V' )");
+            // Restaurant: rid, rname, lat (-90, 90), lon (-180, 180)
             executePlainSQL("INSERT INTO Restaurant 
-                             VALUES ('1223123', 'Restaurant 1', '111','222')");
+                             VALUES ('1223123', 'Restaurant 1', '-65.4231', '54.3842')");
             executePlainSQL("INSERT INTO Restaurant 
-                             VALUES ('32333', 'Restaurant 2', '111','222')");
-
+                             VALUES ('32333', 'Restaurant 2', '-23.6742', '24.9625')");
+            executePlainSQL("INSERT INTO Restaurant 
+                            VALUES ('1234567', 'Restaurant 3', '36.6657', '150.4325')");
+            executePlainSQL("INSERT INTO Restaurant 
+                            VALUES ('7654321', 'Restaurant 4', '80.9572', '176.6501')");
             executePlainSQL("INSERT INTO review 
                              VALUES ('0100', DATE '2015-12-17', '1', '1223123')");
             executePlainSQL("INSERT INTO review 
-            VALUES ('0120', DATE '2015-12-17', '0', '1223123')");
+                             VALUES ('0120', DATE '2015-12-17', '2', '1223123')");
             executePlainSQL("INSERT INTO review 
-            VALUES ('0130', DATE '2015-12-17', '3', '1223123')");
+                             VALUES ('0130', DATE '2015-12-17', '3', '1223123')");
             executePlainSQL("INSERT INTO review 
-            VALUES ('012220', DATE '2015-12-17', '4', '1223123')");
+                        VALUES ('012220', DATE '2015-12-17', '4', '1223123')");
             executePlainSQL("INSERT INTO review 
-            VALUES ('013220', DATE '2015-12-17', '1', '1223123')");
+                        VALUES ('013220', DATE '2015-12-17', '5', '1223123')");
             executePlainSQL("INSERT INTO review 
-            VALUES ('23213', DATE '2015-12-17', '1', '32333')");
+                        VALUES ('23213', DATE '2015-12-17', '5', '32333')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('30407', DATE '2015-12-19', '3', '1234567')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('30408', DATE '2015-01-17', '0', '1234567')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('30409', DATE '2016-12-17', '4', '1234567')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('30410', DATE '2016-01-15', '5', '7654321')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('30411', DATE '2017-10-27', '3', '7654321')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('30412', DATE '2016-04-23', '1', '7654321')");
+            executePlainSQL("INSERT INTO review 
+            VALUES ('30413', DATE '2015-09-25', '4', '7654321')");
 
+            // Owner: owner_id, networth_cad, name
+            executePlainSQL("INSERT INTO owner
+                        VALUES ('001', '40000', 'owner 1')");
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('002', '50000', 'owner 2')");
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('003', '45000', 'owner 3',)");
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('004', '44000', 'owner 4')");
+            // Ingredient: ingredient_id, name
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('101', 'ingredient 1')");
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('102', 'ingredient 2')");
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('103', 'ingredient 3')");
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('104', 'ingredient 4')");
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('105', 'ingredient 5')");
+            executePlainSQL("INSERT INTO review 
+                        VALUES ('106', 'ingredient 6')");
+            // postalCity: postal_code, city
+            
+            // LocationTable: lat, lon, add , pos, city
+            executePlainSQL("INSERT INTO LocationTable 
+                        VALUES ('10', '115', '453-ABC vv','A2A A2V', 'city 1')");
+            executePlainSQL("INSERT INTO LocationTable 
+                        VALUES ('11', '114', '454-ABC vv','A2A B2V', 'city 2' )");
+            executePlainSQL("INSERT INTO LocationTable 
+                        VALUES ('12', '113', '455-ABC vv','A2A C2V', 'city 3' )");
+            executePlainSQL("INSERT INTO LocationTable 
+                        VALUES ('13', '112', '456-ABC vv','A2A D2V', 'city 4' )");
+            executePlainSQL("INSERT INTO LocationTable 
+                        VALUES ('14', '111', '457-ABC vv','A2A E2V', 'city 5' )");
             OCICommit($db_conn);
         }
 
@@ -310,7 +359,6 @@
                                                                                                 ON review.rid = Restaurant.rid
                                                                                                 GROUP BY review.rid, rname
                                                                                                 ORDER BY AVG(numstar) DESC)
-
                                         )
                                         ");
             while (($row = oci_fetch_row($result)) != false) {
