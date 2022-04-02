@@ -23,7 +23,7 @@
         <h2>Reset</h2>
         <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
 
-        <form method="POST" action="project.php">
+        <form method="POST" action="oracle-test.php">
             <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
             <input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
             <p><input type="submit" value="Reset" name="reset"></p>
@@ -34,7 +34,7 @@
         <h2>Initiate Table</h2>
         <p>Populate the tables</p>
 
-        <form method="POST" action="project.php">
+        <form method="POST" action="oracle-test.php">
             <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
             <input type="hidden" id="initTableQueryRequest" name="initTableQueryRequest">
             <p><input type="submit" value="Populate" name="populate"></p>
@@ -44,7 +44,7 @@
 
 
         <h2>Insert review </h2>
-        <form method="POST" action="project.php"> <!--refresh page when submitted-->
+        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
             ID: <input type="text" name="review_id"> <br /><br />
             Score: <input type="text" name="num_star"> <br /><br />
@@ -58,7 +58,7 @@
         <h2>Update num_star in FiveStarReview</h2>
         <p>The value must be between 1 and 5 inclusive, any other value will be rejected</p>
 
-        <form method="POST" action="project.php"> <!--refresh page when submitted-->
+        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
            Review ID: <input type="text" name="reviewid"> <br /><br />
             New Name: <input type="number" name="newrating"> <br /><br />
@@ -70,7 +70,7 @@
         <h2>Delete Review</h2>
         <p>If the rid does not exist query will be rejected</p>
 
-        <form method="POST" action="project.php"> <!--refresh page when submitted-->
+        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
             Review ID: <input type="text" name="reviewid"> <br /><br />
 
@@ -82,7 +82,7 @@
 <h2>Selection</h2>
         <p>Get all owners with networth greater than entered value </p>
 
-        <form method="GET" action="project.php"> <!--refresh page when submitted-->
+        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="selectQueryRequest" name="selectQueryRequest">
             Review ID: <input type="number" name="networth"> <br /><br />
 
@@ -95,7 +95,7 @@
 <h2>Projection</h2>
         <p>Get the specified column from specified relation</p>
 
-        <form method="GET" action="project.php"> <!--refresh page when submitted-->
+        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="projectQueryRequest" name="projectQueryRequest">
             Relation: <input type="text" name="relation"> <br /><br />
 	        Column: <input type="text" name="column"> <br /><br />
@@ -110,7 +110,7 @@
 <h2>Join</h2>
         <p>Get all the restuarants in a certain city</p>
 
-        <form method="GET" action="project.php"> <!--refresh page when submitted-->
+        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
             City: <input type="text" name="city"> <br /><br />
 
@@ -120,26 +120,21 @@
 
         <hr />
 
-        <h2>Count the Tuples in DemoTable</h2>
-        <form method="GET" action="project.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="countTupleRequest" name="countTupleRequest">
-            <input type="submit" name="countTuples"></p>
-        </form>
 
-        <h2>Avg the Tuples in DemoTable [Aggregation Query]</h2>
-        <form method="GET" action="project.php"> <!--refresh page when submitted-->
+        <h2>Avg rating from review [Aggregation Query]</h2>
+        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="getAvgRequest" name="getAvgRequest">
             <input type="submit" name="getAvg"></p>
         </form>
 
-        <h2>Max Avg the Tuples in DemoTable [Nested-Aggregation Query]</h2>
-        <form method="GET" action="project.php"> <!--refresh page when submitted-->
+        <h2>Max average rating from review [Nested-Aggregation Query]</h2>
+        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="getMaxAvgRequest" name="getMaxAvgRequest">
             <input type="submit" name="getMaxAvg"></p>
         </form>
 
-        <h2>Search for restaurant with 0-5 stars point [Div Query]</h2>
-        <form method="GET" action="project.php"> <!--refresh page when submitted-->
+        <h2>Search for restaurants that contain every possible rating number of star [Div Query]</h2>
+        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
             <input type="hidden" id="getDivRequest" name="getDivRequest">
             <input type="submit" name="getDiv"></p>
         </form>
